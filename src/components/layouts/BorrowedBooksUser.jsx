@@ -87,13 +87,15 @@ export default function BorrowedBooksUser() {
                         </p>
                       </td>
                       <td>
-                        <Link
-                          href={`/books/${book.book_id}`}
-                          className="text-sm flex items-center bg-amber-500 border-2 border-amber-300 font-semibold text-white px-3 py-2 rounded-md hover:bg-amber-400 hover:border-amber-200 focus:bg-amber-600"
-                        >
-                          <MdReadMore className="mr-2 text-2xl" />
-                          Lihat
-                        </Link>
+                        <button className="text-sm flex items-center bg-amber-500 border-2 border-amber-300 font-semibold text-white px-3 py-2 rounded-md hover:bg-amber-400 hover:border-amber-200 focus:bg-amber-600">
+                          <Link
+                            href={`/books/${book.book_id}`}
+                            className="flex items-center"
+                          >
+                            <MdReadMore className="mr-2 text-2xl" />
+                            Lihat
+                          </Link>
+                        </button>
                       </td>
                     </tr>
                   ))}

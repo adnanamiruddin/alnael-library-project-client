@@ -125,7 +125,7 @@ export default function MyReviews() {
           <ConfirmDeleteItemModal
             handleDelete={handleDeleteReview}
             onDeleteProcess={isOnRequest}
-            type="komentar"
+            content="komentar"
           />
         </div>
       ) : (

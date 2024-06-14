@@ -47,7 +47,6 @@ export default function Login() {
           password: values.password,
         });
         if (response) {
-          console.log(response);
           signInForm.resetForm();
           dispatch(setUser(response.user));
           toast.success(`Selamat datang kembali ${response.user.first_name}`);

@@ -13,6 +13,7 @@ export default function BorrowBookModal({ book }) {
   const [isOnRequest, setIsOnRequest] = useState(false);
   const [bookItems, setBookItems] = useState([]);
   const [selectedBookItemCode, setSelectedBookItemCode] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     const fetchBookItems = async () => {
@@ -34,7 +35,11 @@ export default function BorrowBookModal({ book }) {
   };
 
   const handleBorrowBookSubmit = async () => {
-    if (isOnRequest || !selectedBookItemCode) return;
+    if (isOnRequest) return;
+    if (!selectedBookItemCode) {
+      setErrorMessage("Pilih kode buku terlebih dahulu");
+      return;
+    }
 
     setIsOnRequest(true);
     const { response, error } = await loansApi.borrowBook({
@@ -42,7 +47,7 @@ export default function BorrowBookModal({ book }) {
       book_code: selectedBookItemCode,
     });
     if (response) {
-      toast.success("Berhasil meminjam buku");
+      toast.success("Berhasil meminjam buku. Halaman segera dimuat ulang...");
       document.getElementById("borrow_book_modal").close();
       setTimeout(() => {
         router.reload();
@@ -110,6 +115,9 @@ export default function BorrowBookModal({ book }) {
               </option>
             ))}
           </select>
+          {errorMessage ? (
+            <p className="text-xs text-red-500 ms-1 mt-1">{errorMessage}</p>
+          ) : null}
         </div>
 
         <button

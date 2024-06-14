@@ -65,6 +65,7 @@ const booksApi = {
     publication_year,
     description,
     stock,
+    category_ids,
   }) => {
     try {
       const response = await privateClient.put(booksEndpoint.bookById({ id }), {
@@ -76,6 +77,7 @@ const booksApi = {
         publication_year,
         description,
         stock,
+        category_ids,
       });
       return { response };
     } catch (error) {

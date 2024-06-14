@@ -198,10 +198,7 @@ export default function BookDetail() {
       dispatch(setNotLoggedInModalOpen(true));
       return;
     }
-    if (isOnLoan) {
-      toast.error("Buku sedang dipinjam");
-      return;
-    }
+    if (isOnLoan) return;
     document.getElementById("borrow_book_modal").showModal();
   };
 
@@ -369,7 +366,7 @@ export default function BookDetail() {
       {/* Mobile View END */}
 
       {/* Tab - Desktop View START */}
-      {/* <div className="hidden md:inline-block -mt-6 -mx-6">
+      <div className="hidden md:inline-block -mt-6 -mx-6 w-full">
         <Image
           src={"/perpustakaan1.jpg"}
           alt={book.title}
@@ -377,7 +374,10 @@ export default function BookDetail() {
           height={1080}
           className="absolute max-h-screen object-cover overflow-x-hidden"
         />
-        <div className="absolute bg-gradient-to-t from-white from-55% to-transparent min-h-screen w-full flex items-center pt-32">
+        <div
+          ref={absoluteDivRef}
+          className="absolute bg-gradient-to-t from-white from-55% to-transparent min-h-screen w-full flex items-center pt-32"
+        >
           <div className="flex justify-center items-start w-full gap-16">
             <Image
               src={book.image_url}
@@ -396,15 +396,24 @@ export default function BookDetail() {
 
               <div className="mt-3 flex justify-between items-start">
                 <div className="flex items-center gap-4">
-                  <MdFavoriteBorder
-                    onClick={handleAddToFavoriteIconClicked}
-                    className="text-red-600 text-3xl cursor-pointer"
-                  />
+                  {isFavorite ? (
+                    <MdFavorite
+                      onClick={handleAddToFavoriteIconClicked}
+                      className="text-red-600 text-3xl cursor-pointer"
+                    />
+                  ) : (
+                    <MdFavoriteBorder
+                      onClick={handleAddToFavoriteIconClicked}
+                      className="text-red-600 text-3xl cursor-pointer"
+                    />
+                  )}
                   <button
                     onClick={handleBorrowBockButtonClicked}
-                    className="btn text-white font-bold text-base shadow-lg border-2 py-2 px-4 bg-amber-600 border-amber-300 hover:bg-amber-500 hover:border-amber-100 hover:shadow-2xl hover:drop-shadow-2xl"
+                    className={`btn text-white font-bold text-base shadow-lg border-2 py-2 px-4 bg-amber-600 border-amber-300 hover:bg-amber-500 hover:border-amber-100 hover:shadow-2xl hover:drop-shadow-2xl ${
+                      isOnLoan ? "brightness-75 cursor-not-allowed" : ""
+                    } ${user?.role === "admin" ? "hidden" : ""}`}
                   >
-                    Pinjam Buku Ini
+                    {isOnLoan ? "Buku Sedang Dipinjam" : "Pinjam Buku Ini"}
                   </button>
                 </div>
 
@@ -431,40 +440,49 @@ export default function BookDetail() {
           </div>
         </div>
 
-        <div className="min-h-screen mb-16"></div>
+        <div className="min-h-screen" ref={bottomDivRef}></div>
 
         <div className="py-12 px-32">
           <h2 className="font-bold text-4xl">Komentar</h2>
 
-          <div className="mt-6 flex flex-col gap-6 mb-4 px-8">
-            {reviews.map((review) => (
-              <div key={review.id} className="flex items-start gap-4">
-                <TextAvatar
-                  firstName={review.first_name}
-                  lastName={review.last_name}
-                />
+          <div className="mt-6 flex flex-col gap-6 mb-4 px-2">
+            {reviews.length > 0 ? (
+              reviews.map((review) => (
+                <div key={review.id} className="flex items-start gap-4">
+                  <TextAvatar
+                    firstName={review.first_name}
+                    lastName={review.last_name}
+                  />
 
-                <div className="w-full relative">
-                  {review.isSame && (
-                    <button className="absolute right-0 top-0 btn text-white font-bold text-sm shadow-lg border-2 py-2 px-4 bg-red-600 border-red-300 hover:bg-red-500 hover:border-red-100 hover:shadow-2xl hover:drop-shadow-2xl">
-                      <FaRegTrashAlt className="text-white text-lg me-1" />
-                      Hapus
-                    </button>
-                  )}
-                  <p className="text-2xl font-medium">
-                    {review.first_name + " " + review.last_name}
-                  </p>
-                  <p className="mt-2 text-xs">{review.created_at}</p>
-                  <p className="mt-4 text-base text-justify">
-                    {review.review_review}
-                  </p>
+                  <div className="w-full relative">
+                    {user?.id === review.user_id ? (
+                      <button
+                        onClick={() => {
+                          handleDeleteReviewIconClicked(review.id);
+                        }}
+                        className="absolute right-0 top-0 btn text-white font-bold text-sm shadow-lg border-2 py-2 px-4 bg-red-600 border-red-300 hover:bg-red-500 hover:border-red-100 hover:shadow-2xl hover:drop-shadow-2xl"
+                      >
+                        <FaRegTrashAlt className="text-white text-lg me-1" />
+                        Hapus
+                      </button>
+                    ) : null}
+                    <p className="text-xl font-medium">
+                      {review.first_name + " " + review.last_name}
+                    </p>
+                    <p className="mt-2 text-xs">{review.created_at}</p>
+                    <p className="mt-4 text-base text-justify">
+                      {review.review_comment}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>Belum ada komentar</p>
+            )}
           </div>
 
           {user ? (
-            <div className="mt-8 flex justify-center items-center px-8">
+            <div className="mt-8 flex justify-center items-center px-2">
               <div className="border-t border-gray-300 pt-3 flex items-start gap-3 w-full">
                 <TextAvatar
                   firstName={user.first_name}
@@ -475,13 +493,12 @@ export default function BookDetail() {
                   <p className="text-lg font-medium">
                     {user.first_name + " " + user.last_name}
                   </p>
-                  <textarea
+                  <TextArea
                     value={newReview}
                     onChange={(e) => setNewReview(e.target.value)}
                     placeholder="Tulis komentar disini..."
                     rows={4}
-                    className="mt-4 textarea w-full bg-white text-black border border-amber-400 focus:border-amber-300 focus:border-2"
-                  ></textarea>
+                  />
                   <button
                     disabled={isOnRequest}
                     onClick={handlePostNewReview}
@@ -503,7 +520,7 @@ export default function BookDetail() {
             </div>
           ) : null}
         </div>
-      </div> */}
+      </div>
       {/* Tab - Desktop View END */}
 
       <ConfirmDeleteItemModal

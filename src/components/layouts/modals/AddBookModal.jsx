@@ -110,7 +110,7 @@ export default function AddBookModal() {
 
   return (
     <dialog id="add_book_modal" className="modal">
-      <div className="modal-box bg-gray-100">
+      <div className="modal-box bg-gray-100 hide-scrollbar">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             ✕
@@ -258,7 +258,7 @@ export default function AddBookModal() {
           </div>
 
           <div className="mt-3">
-            <LoadingButton loading={isOnRequest}>Buat</LoadingButton>
+            <LoadingButton loading={isOnRequest}>Tambah</LoadingButton>
           </div>
         </form>
       </div>

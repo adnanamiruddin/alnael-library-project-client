@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "@/redux/features/userSlice";
 import { toast } from "react-toastify";
 import { IoMenu } from "react-icons/io5";
-import { FaHome, FaRegAddressBook, FaBook, FaSwatchbook, FaRegCommentDots } from "react-icons/fa";
+import {
+  FaHome,
+  FaRegAddressBook,
+  FaBook,
+  FaSwatchbook,
+  FaRegCommentDots,
+} from "react-icons/fa";
 import { FaBookBookmark } from "react-icons/fa6";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { MdAccountCircle, MdFavorite } from "react-icons/md";
@@ -22,8 +28,6 @@ const generalLinks = [
     icon: <FaBook className="text-2xl me-1" />,
   },
 ];
-
-const categoriesLinks = ["Fiksi", "Non-Fiksi", "Komik", "Novel", "Puisi"];
 
 const notLoggedInLinks = [
   {
@@ -264,29 +268,6 @@ export default function Navbar({ isCarouselPassed }) {
                 </Link>
               </li>
             ))}
-
-            <li
-              tabIndex={0}
-              className={`transition-all delay-300 ${
-                router.pathname === "/blogs" ? "opacity-0" : ""
-              }`}
-            >
-              <details>
-                <summary>Kategori</summary>
-                <ul className="p-2 border-2 border-gray-100 w-max">
-                  {categoriesLinks.map((category) => (
-                    <li key={category}>
-                      <Link
-                        href={`/blogs?category=${category}`}
-                        className="text-white text-sm hover:bg-amber-500 hover:text-white"
-                      >
-                        {category}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            </li>
           </ul>
         </div>
 
@@ -335,17 +316,35 @@ export default function Navbar({ isCarouselPassed }) {
                 tabIndex={0}
                 className="dropdown-content z-[1] menu p-2 shadow rounded-box w-52 bg-amber-500"
               >
-                {userLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-white font-semibold hover:bg-amber-300"
-                    >
-                      {link.icon}
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                {user.role === "admin" ? (
+                  <>
+                    {adminLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          className="text-white font-semibold hover:bg-amber-300"
+                        >
+                          {link.icon}
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {userLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          className="text-white font-semibold hover:bg-amber-300"
+                        >
+                          {link.icon}
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </>
+                )}
 
                 <li>
                   <button

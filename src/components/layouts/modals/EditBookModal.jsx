@@ -36,12 +36,12 @@ export default function EditBookModal({ bookId }) {
           stock: response.data.stock,
         });
         setBookImageUrl(response.data.image_url);
-        // setSelectedCategories(
-        //   response.data.categories.map((category) => ({
-        //     value: category.id,
-        //     label: category.name,
-        //   }))
-        // );
+        setSelectedCategories(
+          response.data.categories.map((category) => ({
+            value: category.id,
+            label: category.name,
+          }))
+        );
       }
       if (error) toast.error("Gagal mengambil data buku");
     };
@@ -112,6 +112,7 @@ export default function EditBookModal({ bookId }) {
         publication_year: values.publication_year,
         description: values.description,
         stock: values.stock,
+        category_ids: selectedCategories.map((cat) => cat.value),
       });
       if (response) {
         toast.success(
@@ -136,7 +137,7 @@ export default function EditBookModal({ bookId }) {
 
   return (
     <dialog id="edit_book_modal" className="modal">
-      <div className="modal-box bg-gray-100">
+      <div className="modal-box bg-gray-100 hide-scrollbar">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             ✕

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import usersApi from "@/api/modules/users.api";
 import Navbar from "./layouts/Navbar";
-import { selectUser, setUser } from "@/redux/features/userSlice";
-import { ToastContainer, toast } from "react-toastify";
+import { setUser } from "@/redux/features/userSlice";
+import { ToastContainer } from "react-toastify";
 import Footer from "@/components/layouts/Footer";
 import Carousel from "./layouts/Carousel";
 import NotLoggedInModal from "./layouts/modals/NotLoggedInModal";
@@ -44,7 +44,7 @@ export default function MainLayout({ children }) {
     <>
       {/* Config React Toastify START */}
       <ToastContainer
-        position="top-center"
+        position="bottom-left"
         autoClose={4000}
         z-index="9999"
         theme="light"
