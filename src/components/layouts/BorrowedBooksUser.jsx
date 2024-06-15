@@ -35,7 +35,7 @@ export default function BorrowedBooksUser() {
         <div className="md:mx-16 md:mt-2">
           <div className="flex justify-between">
             <h1 className="text-3xl font-bold leading-snug">
-              Daftar Buku yang Dipinjam
+              Riwayat Peminjaman Buku
             </h1>
           </div>
 
