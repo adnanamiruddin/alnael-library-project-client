@@ -13,10 +13,8 @@ export default function ConfirmReturnBookModal({ loanId, bookCode }) {
     if (!loanId || isOnRequest) return;
 
     setIsOnRequest(true);
-    const dateOfReturn = new Date().toISOString();
     const { response, error } = await loansApi.returnBook({
       id: loanId,
-      date_of_return: dateOfReturn,
     });
     if (response) {
       toast.success(

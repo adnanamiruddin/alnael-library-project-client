@@ -58,11 +58,9 @@ const loansApi = {
     }
   },
 
-  returnBook: async ({ id, date_of_return }) => {
+  returnBook: async ({ id }) => {
     try {
-      const response = await privateClient.put(loansEndpoint.loanById({ id }), {
-        date_of_return,
-      });
+      const response = await privateClient.put(loansEndpoint.loanById({ id }));
       return { response };
     } catch (error) {
       return { error };
