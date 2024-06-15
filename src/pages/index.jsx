@@ -97,7 +97,7 @@ export default function Home() {
           <MotionDiv x={-100}>
             <HomeCard
               title="Daftar"
-              description="Ingin menjadi bagian dari Jelaya? Yuk buat akun Jelaya kamu terlebih dahulu"
+              description="Ingin menjadi bagian dari Alnael Library? Yuk buat akun Alnael Library kamu terlebih dahulu"
               buttonLink="/register"
             />
           </MotionDiv>

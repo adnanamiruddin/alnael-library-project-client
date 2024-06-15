@@ -20,11 +20,7 @@ export default function LoanDetailModal({ loanId }) {
   }, [loanId]);
 
   const handleReturnBookClick = () => {
-    if (!loan) return;
-    if (loan.date_of_return) {
-      toast.error("Buku telah dikembalikan");
-      return;
-    }
+    if (!loan || loan.date_of_return) return;
     document.getElementById("confirm_return_book_modal").showModal();
   };
 

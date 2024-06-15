@@ -107,9 +107,6 @@ export default function Login() {
               signInForm.touched.password && signInForm.errors.password
             }
           />
-          <Link href="/" className="mb-3 text-end">
-            <p className="text-blue-600">Lupa kata sandi?</p>
-          </Link>
           <LoadingButton loading={isOnRequest}>Masuk</LoadingButton>
         </form>
 
