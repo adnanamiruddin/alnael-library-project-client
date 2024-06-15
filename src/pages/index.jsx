@@ -79,7 +79,7 @@ export default function Home() {
             </p>
 
             <div className="hidden md:inline-block">
-              <HomeButton href="/blogs">
+              <HomeButton href="/books">
                 Yuk Baca Buku-Buku yang Tersedia
               </HomeButton>
             </div>
@@ -89,7 +89,7 @@ export default function Home() {
 
       <MotionDiv x={-100} optionalStyling="md:hidden">
         <div className="mt-2"></div>
-        <HomeButton href="/blogs">Yuk Baca Buku-Buku yang Tersedia</HomeButton>
+        <HomeButton href="/books">Yuk Baca Buku-Buku yang Tersedia</HomeButton>
       </MotionDiv>
 
       {!user ? (

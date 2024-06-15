@@ -7,14 +7,14 @@ export default function Footer() {
         <Image
           src="/logo-perpus.jpeg"
           alt="Logo Pantai Marina"
-          width={100}
-          height={100}
+          width={500}
+          height={500}
           className="w-14 h-14 rounded-md"
         />
 
-        <p className="text-gray-500 text-sm">
-          Copyright © 2024 Jelaya. Developed by Adnan Amiruddin, Al Qadri,
-          Khalizatul Jannah
+        <p className="text-gray-500 text-xs md:text-sm">
+          Copyright © 2024 Alnael Library. Developed by Muh. Adnan Putra
+          Amiruddin, Al Qadri, Khalizatul Jannah
         </p>
       </div>
     </div>
