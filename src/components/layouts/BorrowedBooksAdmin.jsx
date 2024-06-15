@@ -52,7 +52,7 @@ export default function BorrowedBooksAdmin() {
                   <tr className="text-base text-black md:text-2xl">
                     <th>No.</th>
                     <th>Kode Buku</th>
-                    <th>Id</th>
+                    <th>Id Peminjaman</th>
                     <th>Nama Peminjam</th>
                     <th>Sampul</th>
                     <th>Judul</th>
@@ -62,56 +62,62 @@ export default function BorrowedBooksAdmin() {
                 </thead>
 
                 <tbody>
-                  {books.map((book, index) => (
-                    <tr
-                      key={book.id}
-                      className="text-base text-black md:text-lg"
-                    >
-                      <td>{index + 1}.</td>
-                      <td>{book.book_code}</td>
-                      <td>{book.book_id}</td>
-                      <td>{book.user_name}</td>
-                      <td>
-                        <Image
-                          width={100}
-                          height={100}
-                          src={book.image_url}
-                          alt={book.title}
-                          className="w-20 h-20 object-cover rounded-md"
-                        />
-                      </td>
-                      <td>{book.title}</td>
-                      <td>
-                        <p
-                          className={`badge capitalize text-white p-3 rounded-md border-0 ${
-                            book.status === "borrowed"
-                              ? "bg-blue-600"
-                              : "bg-red-600"
-                          }`}
-                        >
-                          {book.status === "borrowed" ? "Dipinjam" : "Dikembalikan"}
-                        </p>
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            handleDetailLoanClick(book.id);
-                          }}
-                          className="text-sm flex items-center bg-amber-500 border-2 border-amber-300 font-semibold text-white px-3 py-2 rounded-md hover:bg-amber-400 hover:border-amber-200 focus:bg-amber-600"
-                        >
-                          <MdReadMore className="mr-2 text-2xl" />
-                          Lihat
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {books
+                    .sort((a, b) => b.id - a.id)
+                    .map((book, index) => (
+                      <tr
+                        key={book.id}
+                        className="text-base text-black md:text-lg"
+                      >
+                        <td>{index + 1}.</td>
+                        <td>{book.book_code}</td>
+                        <td>
+                          <p className="ms-2">{book.id}</p>
+                        </td>
+                        <td>{book.user_name}</td>
+                        <td>
+                          <Image
+                            width={100}
+                            height={100}
+                            src={book.image_url}
+                            alt={book.title}
+                            className="w-20 h-20 object-cover rounded-md"
+                          />
+                        </td>
+                        <td>{book.title}</td>
+                        <td>
+                          <p
+                            className={`badge capitalize text-white p-3 rounded-md border-0 ${
+                              book.status === "borrowed"
+                                ? "bg-blue-600"
+                                : "bg-red-600"
+                            }`}
+                          >
+                            {book.status === "borrowed"
+                              ? "Dipinjam"
+                              : "Dikembalikan"}
+                          </p>
+                        </td>
+                        <td>
+                          <button
+                            onClick={() => {
+                              handleDetailLoanClick(book.id);
+                            }}
+                            className="text-sm flex items-center bg-amber-500 border-2 border-amber-300 font-semibold text-white px-3 py-2 rounded-md hover:bg-amber-400 hover:border-amber-200 focus:bg-amber-600"
+                          >
+                            <MdReadMore className="mr-2 text-2xl" />
+                            Lihat
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
 
                 <tfoot>
                   <tr className="md:text-base">
                     <th>No.</th>
                     <th>Kode Buku</th>
-                    <th>Id</th>
+                    <th>Id Peminjaman</th>
                     <th>Nama Peminjam</th>
                     <th>Sampul</th>
                     <th>Judul</th>

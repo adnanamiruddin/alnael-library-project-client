@@ -55,7 +55,7 @@ const userLinks = [
   },
   {
     href: "/dashboard/borrowed-books",
-    label: "Buku yang Dipinjam",
+    label: "Riwayat Peminjaman Buku",
     icon: <FaBookBookmark className="text-2xl me-1" />,
   },
   {

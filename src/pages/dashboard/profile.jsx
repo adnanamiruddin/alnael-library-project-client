@@ -52,7 +52,9 @@ export default function Profile() {
     validationSchema: Yup.object({
       firstName: Yup.string().required("Nama depan harus diisi"),
       lastName: Yup.string().required("Nama belakang harus diisi"),
-      age: Yup.number().required("Umur harus diisi"),
+      age: Yup.number()
+        .required("Umur harus diisi")
+        .min(10, "Umur minimal 10 tahun"),
       address: Yup.string().required("Alamat harus diisi"),
       phoneNumber: Yup.string().required("Nomor telepon (WA) harus diisi"),
     }),

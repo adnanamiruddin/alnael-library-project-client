@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import UserPage from "@/components/utils/UserPage";
 
 export default function MyReviews() {
   const router = useRouter();
@@ -64,73 +65,77 @@ export default function MyReviews() {
 
   return (
     <ProtectedPage>
-      {isDataLoaded ? (
-        <div className="md:mx-16 md:mt-2">
-          <h1 className="text-3xl font-bold mt-1">Komentar Saya</h1>
+      <UserPage>
+        {isDataLoaded ? (
+          <div className="md:mx-16 md:mt-2">
+            <h1 className="text-3xl font-bold mt-1">Komentar Saya</h1>
 
-          {reviews.length > 0 ? (
-            <div className="flex flex-col gap-6 mt-6 md:flex-row">
-              {reviews.map((review) => (
-                <div
-                  key={review.id}
-                  className="bg-white shadow-lg border-2 rounded-md p-4 md:w-[32%]"
-                >
-                  <div className="flex items-start gap-4">
-                    <Image
-                      src={review.image_url}
-                      alt="Gambar Blog"
-                      width={100}
-                      height={100}
-                      className="w-1/4 object-contain"
-                      onClick={() => {
-                        router.push(`/blogs/${review.id}`);
-                      }}
-                    />
+            {reviews.length > 0 ? (
+              <div className="flex flex-col gap-6 mt-6 md:flex-row">
+                {reviews.map((review) => (
+                  <div
+                    key={review.id}
+                    className="bg-white shadow-lg border-2 rounded-md p-4 md:w-[32%]"
+                  >
+                    <div className="flex items-start gap-4">
+                      <Image
+                        src={review.image_url}
+                        alt="Gambar Blog"
+                        width={100}
+                        height={100}
+                        className="w-1/4 object-contain"
+                        onClick={() => {
+                          router.push(`/blogs/${review.id}`);
+                        }}
+                      />
 
-                    <div className="w-full relative">
-                      <button
-                        onClick={() => handleDeleteReviewIconClicked(review.id)}
-                        className="absolute right-0 top-0"
-                      >
-                        <FaRegTrashAlt className="text-red-600 text-lg" />
-                      </button>
-                      <Link href={`/books/${review.book_id}`}>
-                        <p className="text-xl font-semibold">
-                          {review.review_comment}
-                        </p>
-                        <p className="text-xs">{review.created_at}</p>
-                        <p className="mt-3 text-sm text-justify">
-                          {review.text}
-                        </p>
-                      </Link>
+                      <div className="w-full relative">
+                        <button
+                          onClick={() =>
+                            handleDeleteReviewIconClicked(review.id)
+                          }
+                          className="absolute right-0 top-0"
+                        >
+                          <FaRegTrashAlt className="text-red-600 text-lg" />
+                        </button>
+                        <Link href={`/books/${review.book_id}`}>
+                          <p className="text-xl font-semibold">
+                            {review.review_comment}
+                          </p>
+                          <p className="text-xs">{review.created_at}</p>
+                          <p className="mt-3 text-sm text-justify">
+                            {review.text}
+                          </p>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex justify-center items-center flex-col">
-              <NotFound />
+                ))}
+              </div>
+            ) : (
+              <div className="flex justify-center items-center flex-col">
+                <NotFound />
 
-              <p className="mt-6 text-center font-bold text-xl md:text-2xl">
-                Kamu belum pernah memberikan komentar pada Alnael Library
-              </p>
+                <p className="mt-6 text-center font-bold text-xl md:text-2xl">
+                  Kamu belum pernah memberikan komentar pada Alnael Library
+                </p>
 
-              <HomeButton href="/books">
-                Yuk lihat buku dan berikan komentar
-              </HomeButton>
-            </div>
-          )}
+                <HomeButton href="/books">
+                  Yuk lihat buku dan berikan komentar
+                </HomeButton>
+              </div>
+            )}
 
-          <ConfirmDeleteItemModal
-            handleDelete={handleDeleteReview}
-            onDeleteProcess={isOnRequest}
-            content="komentar"
-          />
-        </div>
-      ) : (
-        <GlobalLoading />
-      )}
+            <ConfirmDeleteItemModal
+              handleDelete={handleDeleteReview}
+              onDeleteProcess={isOnRequest}
+              content="komentar"
+            />
+          </div>
+        ) : (
+          <GlobalLoading />
+        )}
+      </UserPage>
     </ProtectedPage>
   );
 }

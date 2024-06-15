@@ -17,6 +17,9 @@ export default function AddBookModal() {
   const router = useRouter();
 
   const [isOnRequest, setIsOnRequest] = useState(false);
+  const [errorMessageCategory, setErrorMessageCategory] = useState(undefined);
+  const [errorMessageImage, setErrorMessageImage] = useState(undefined);
+
   const [bookImageUpload, setBookImageUpload] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -53,12 +56,24 @@ export default function AddBookModal() {
       description: Yup.string().required("Deskripsi harus diisi"),
       stock: Yup.number()
         .typeError("Stok harus berupa angka")
-        .required("Stok harus diisi"),
+        .required("Stok harus diisi")
+        .min(1, "Stok minimal 1"),
     }),
     onSubmit: async (values) => {
       if (isOnRequest) return;
 
       setIsOnRequest(true);
+      if (selectedCategories.length === 0) {
+        setErrorMessageCategory("Kategori harus dipilih");
+        setIsOnRequest(false);
+        return;
+      }
+      if (!bookImageUpload) {
+        setErrorMessageImage("Sampul buku harus diunggah");
+        setIsOnRequest(false);
+        return;
+      }
+
       let bookImageUrl = "";
       if (bookImageUpload) {
         try {
@@ -165,6 +180,11 @@ export default function AddBookModal() {
               onChange={handleCategoryChange}
               value={selectedCategories}
             />
+            {errorMessageCategory ? (
+              <p className="mt-1 ms-1 text-xs text-red-500">
+                {errorMessageCategory}
+              </p>
+            ) : null}
           </div>
 
           <Input
@@ -241,6 +261,12 @@ export default function AddBookModal() {
               placeholder="Deskripsi Buku..."
               rows={5}
             />
+            {addBookForm.touched.description &&
+            addBookForm.errors.description !== undefined ? (
+              <p className="ms-1 text-xs text-red-500">
+                {addBookForm.errors.description}
+              </p>
+            ) : null}
           </div>
 
           <div>
@@ -255,6 +281,11 @@ export default function AddBookModal() {
               }}
               className="file-input file-input-bordered file-input-warning w-full bg-gray-50"
             />
+            {errorMessageImage ? (
+              <p className="mt-1 ms-1 text-xs text-red-500">
+                {errorMessageImage}
+              </p>
+            ) : null}
           </div>
 
           <div className="mt-3">

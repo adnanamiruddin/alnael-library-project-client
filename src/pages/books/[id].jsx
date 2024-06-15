@@ -116,6 +116,27 @@ export default function BookDetail() {
     }
   }, [absoluteDivHeight, isDataLoaded]);
 
+  const absoluteDivRefDesktop = useRef(null);
+  const bottomDivRefDesktop = useRef(null);
+  const [absoluteDivHeightDesktop, setAbsoluteDivHeightDesktop] = useState(0);
+  useEffect(() => {
+    const updateDivHeight = () => {
+      if (absoluteDivRefDesktop.current) {
+        setAbsoluteDivHeightDesktop(absoluteDivRefDesktop.current.clientHeight);
+      }
+    };
+    updateDivHeight();
+    if (isDataLoaded) {
+      const timeoutId = setTimeout(updateDivHeight, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [book, reviews, isDataLoaded]);
+  useEffect(() => {
+    if (isDataLoaded && bottomDivRefDesktop.current) {
+      bottomDivRefDesktop.current.style.height = `${absoluteDivHeightDesktop}px`;
+    }
+  }, [absoluteDivHeightDesktop, isDataLoaded]);
+
   const handleAddToFavoriteIconClicked = async () => {
     if (!user) {
       dispatch(setNotLoggedInModalOpen(true));
@@ -193,7 +214,8 @@ export default function BookDetail() {
     }
   };
 
-  const handleBorrowBockButtonClicked = () => {
+  const handleBorrowBookButtonClicked = () => {
+    if (user?.count_of_books_borrowed >= 3 || book.stock <= 0) return;
     if (!user) {
       dispatch(setNotLoggedInModalOpen(true));
       return;
@@ -232,6 +254,17 @@ export default function BookDetail() {
                 {book.title}
               </h1>
 
+              <div className="flex justify-center items-center flex-wrap gap-2">
+                {book.categories.map((category) => (
+                  <span
+                    key={category.id}
+                    className="bg-amber-500 text-white font-medium px-4 py-1 rounded-md text-sm"
+                  >
+                    {category.name}
+                  </span>
+                ))}
+              </div>
+
               <h3 className="text-xl font-semibold text-center">
                 {book.author}
               </h3>
@@ -259,12 +292,22 @@ export default function BookDetail() {
 
               <div className="flex items-center gap-4">
                 <button
-                  onClick={handleBorrowBockButtonClicked}
+                  onClick={handleBorrowBookButtonClicked}
                   className={`btn text-white font-bold text-base shadow-lg border-2 py-2 px-4 bg-amber-600 border-amber-300 hover:bg-amber-500 hover:border-amber-100 hover:shadow-2xl hover:drop-shadow-2xl ${
-                    isOnLoan ? "brightness-75 cursor-not-allowed" : ""
+                    user?.count_of_books_borrowed >= 3 ||
+                    isOnLoan ||
+                    book.stock <= 0
+                      ? "brightness-75 cursor-not-allowed"
+                      : ""
                   } ${user?.role === "admin" ? "hidden" : ""}`}
                 >
-                  {isOnLoan ? "Buku Sedang Dipinjam" : "Pinjam Buku Ini"}
+                  {user?.count_of_books_borrowed >= 3
+                    ? "Tidak Dapat Meminjam Lebih Dari 3 Buku"
+                    : isOnLoan
+                    ? "Buku Sedang Dipinjam"
+                    : book.stock <= 0
+                    ? "Stok Buku Habis"
+                    : "Pinjam Buku Ini"}
                 </button>
                 {isFavorite ? (
                   <MdFavorite
@@ -375,7 +418,7 @@ export default function BookDetail() {
           className="absolute max-h-screen object-cover overflow-x-hidden"
         />
         <div
-          ref={absoluteDivRef}
+          ref={absoluteDivRefDesktop}
           className="absolute bg-gradient-to-t from-white from-55% to-transparent min-h-screen w-full flex items-center pt-32"
         >
           <div className="flex justify-center items-start w-full gap-16">
@@ -390,11 +433,22 @@ export default function BookDetail() {
             <div className="w-[55%] flex flex-col gap-6">
               <h1 className="font-bold text-6xl leading-tight">{book.title}</h1>
 
+              <div className="flex items-center flex-wrap gap-2">
+                {book.categories.map((category) => (
+                  <span
+                    key={category.id}
+                    className="bg-amber-500 text-white font-medium px-4 py-1 rounded-md"
+                  >
+                    {category.name}
+                  </span>
+                ))}
+              </div>
+
               <h3 className="text-3xl font-semibold">{book.author}</h3>
 
               <p className="text-lg text-justify">{book.description}</p>
 
-              <div className="mt-3 flex justify-between items-start">
+              <div className="mt-3 flex justify-between items-start flex-wrap">
                 <div className="flex items-center gap-4">
                   {isFavorite ? (
                     <MdFavorite
@@ -408,12 +462,22 @@ export default function BookDetail() {
                     />
                   )}
                   <button
-                    onClick={handleBorrowBockButtonClicked}
+                    onClick={handleBorrowBookButtonClicked}
                     className={`btn text-white font-bold text-base shadow-lg border-2 py-2 px-4 bg-amber-600 border-amber-300 hover:bg-amber-500 hover:border-amber-100 hover:shadow-2xl hover:drop-shadow-2xl ${
-                      isOnLoan ? "brightness-75 cursor-not-allowed" : ""
+                      user?.count_of_books_borrowed >= 3 ||
+                      isOnLoan ||
+                      book.stock <= 0
+                        ? "brightness-75 cursor-not-allowed"
+                        : ""
                     } ${user?.role === "admin" ? "hidden" : ""}`}
                   >
-                    {isOnLoan ? "Buku Sedang Dipinjam" : "Pinjam Buku Ini"}
+                    {user?.count_of_books_borrowed >= 3
+                      ? "Tidak Dapat Meminjam Lebih Dari 3 Buku"
+                      : isOnLoan
+                      ? "Buku Sedang Dipinjam"
+                      : book.stock <= 0
+                      ? "Stok Buku Habis"
+                      : "Pinjam Buku Ini"}
                   </button>
                 </div>
 
@@ -440,7 +504,7 @@ export default function BookDetail() {
           </div>
         </div>
 
-        <div className="min-h-screen" ref={bottomDivRef}></div>
+        <div className="min-h-screen" ref={bottomDivRefDesktop}></div>
 
         <div className="py-12 px-32">
           <h2 className="font-bold text-4xl">Komentar</h2>

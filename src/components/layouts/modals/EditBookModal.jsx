@@ -17,6 +17,8 @@ export default function EditBookModal({ bookId }) {
   const router = useRouter();
 
   const [isOnRequest, setIsOnRequest] = useState(false);
+  const [errorMessageCategory, setErrorMessageCategory] = useState(undefined);
+
   const [bookImageUrl, setBookImageUrl] = useState(null);
   const [bookImageUpload, setBookImageUpload] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -86,6 +88,12 @@ export default function EditBookModal({ bookId }) {
       if (isOnRequest) return;
 
       setIsOnRequest(true);
+      if (selectedCategories.length === 0) {
+        setErrorMessageCategory("Kategori harus dipilih");
+        setIsOnRequest(false);
+        return;
+      }
+
       let newImageUrl = bookImageUrl;
       if (bookImageUpload) {
         try {
@@ -194,6 +202,11 @@ export default function EditBookModal({ bookId }) {
               onChange={handleCategoryChange}
               value={selectedCategories}
             />
+            {errorMessageCategory ? (
+              <p className="mt-1 ms-1 text-xs text-red-500">
+                {errorMessageCategory}
+              </p>
+            ) : null}
           </div>
 
           <Input
@@ -273,6 +286,12 @@ export default function EditBookModal({ bookId }) {
               placeholder="Deskripsi Buku..."
               rows={5}
             />
+            {editBookForm.touched.description &&
+            editBookForm.errors.description !== undefined ? (
+              <p className="ms-1 text-xs text-red-500">
+                {editBookForm.errors.description}
+              </p>
+            ) : null}
           </div>
 
           <div>

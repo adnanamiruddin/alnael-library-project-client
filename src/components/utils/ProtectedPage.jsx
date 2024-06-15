@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import AnimationLoading from "../layouts/GlobalLoading";
 
-const ProtectedPage = ({ children }) => {
+export default function ProtectedPage({ children }) {
   const router = useRouter();
   const { user } = useSelector(selectUser);
   const [isChecking, setIsChecking] = useState(true);
@@ -27,6 +27,4 @@ const ProtectedPage = ({ children }) => {
   }
 
   return user ? children : null;
-};
-
-export default ProtectedPage;
+}
